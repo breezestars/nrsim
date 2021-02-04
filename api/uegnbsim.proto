@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+option cc_generic_services = false;
+option go_package = "internal/api";
+
+package api;
+
+import "google/protobuf/empty.proto";
+
+service sim_worker {
+  rpc InitGnb (GnbConfig) returns (google.protobuf.Empty) {}
+  rpc InitUe (GnbConfig) returns (google.protobuf.Empty) {}
+  rpc GetConfig (google.protobuf.Empty) returns (GnbConfig) {}
+  rpc StartUeRegister (google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc StartUeDeregister (google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc SetAction (ActionProfile) returns (google.protobuf.Empty) {}
+  rpc StartAction (google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc StopAction (google.protobuf.Empty) returns (google.protobuf.Empty) {}
+}
+
+service sim_master{
+  rpc StreamChannel (stream google.protobuf.Empty) returns (stream google.protobuf.Empty) {}
+}
+
+service  sim_cli{
+  rpc CreateGnb (GnbConfig) returns (google.protobuf.Empty) {}
+  rpc CreateUe (GnbConfig) returns (google.protobuf.Empty) {}
+  rpc DelGnb (IdMessage) returns (google.protobuf.Empty) {}
+  rpc DelUe (IdMessage) returns (google.protobuf.Empty) {}
+  rpc ListGnb (google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc ListUe (IdMessage) returns (google.protobuf.Empty) {}
+  rpc GetGnb (IdMessage) returns (google.protobuf.Empty) {}
+  rpc GetUe (IdMessage) returns (google.protobuf.Empty) {}
+  rpc StartUeRegister (IdMessage) returns (google.protobuf.Empty) {}
+  rpc StartUeDeregister (IdMessage) returns (google.protobuf.Empty) {}
+  rpc SetAction (ActionProfile) returns (google.protobuf.Empty) {}
+  rpc StartAction (IdMessage) returns (google.protobuf.Empty) {}
+  rpc StopAction (IdMessage) returns (google.protobuf.Empty) {}
+}
+
+message IdMessage {
+  uint64 id = 1;
+}
+
+message NameMessage {
+  string name = 1;
+}
+
+message ActionProfile {
+  string cmd = 1;
+}
+
+message RegisterConfig {
+  string IP = 1;
+}
+
+message Plmn {
+  uint32 mcc = 1;
+  uint32 mnc = 2;
+}
+
+message Snssai {
+  uint32 sst = 1;
+  string sd = 2;
+}
+
+message GnbConfig {
+  message GlobalGnbId {
+    Plmn plmn = 1;
+    uint32 gnbid = 2;
+  }
+
+  message BroadcastPlmnList {
+    Plmn plmn = 1;
+    repeated Snssai SliceSupportList = 2;
+  }
+
+  message SupportedTaList {
+    uint32 TAC = 1;
+    repeated BroadcastPlmnList BroadcastPLMNList = 2;
+  }
+
+  message UlInfoNr {
+    message Nrcgi {
+      Plmn PLMN = 1;
+      uint32 NRCellID = 2;
+    }
+
+    message Tai {
+      Plmn PLMN = 1;
+      uint32 TAC = 2;
+    }
+
+    Nrcgi NRCGI = 1;
+    Tai TAI = 2;
+  }
+
+  message GTPu {
+    string GTPuIfName = 1;
+    string GTPuAddr = 2;
+  }
+
+  GlobalGnbId GlobalGNBID = 1;
+  repeated SupportedTaList SupportedTAList = 2;
+  // not sure
+  string PagingDRX = 3;
+  // not sure
+  uint32 RanUeNGAPId = 4;
+  // not sure
+  UlInfoNr ULInfoNR = 5;
+  GTPu Gtpu = 6;
+  repeated UeConfig UE = 7;
+}
+
+message UeConfig {
+  message AuthParam {
+    string K = 1;
+    string OPc = 2;
+  }
+
+  string imeisv = 1;
+  // not sure
+  string msin = 2;
+  Plmn plmn = 3;
+  // not sure
+  uint32 RoutingIndicator = 4;
+  // not sure
+  string ProtectionScheme = 5;
+  AuthParam AuthParameter = 6;
+  Snssai snssai = 7;
+  string dnn = 8;
+  string url = 9;
+}
+
+
