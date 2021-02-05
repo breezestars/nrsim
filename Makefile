@@ -12,21 +12,18 @@ api:
 
 cli:
 	@echo "\033[32m----- Running CLI -----\033[0m"
-	echo "Not IMPLEMENT yet"
+	go run cmd/cli/cli.go
 
 master:
 	@echo "\033[32m----- Running master -----\033[0m"
-	go run cmd/master/master.go cmd/master/client.go cmd/master/server.go $(filter-out $@,$(MAKECMDGOALS))
+	go run cmd/master/master.go cmd/master/client.go cmd/master/server.go
 
 worker:
 	@echo "\033[32m----- Running worker -----\033[0m"
-	go run cmd/worker/worker.go cmd/worker/client.go cmd/worker/server.go -masterSrvIp=192.168.1.1:50051 $(filter-out $@,$(MAKECMDGOALS))
+	go run cmd/worker/worker.go cmd/worker/client.go cmd/worker/server.go -masterSrvIp=192.168.1.1:50051
 
 test:
 	@echo $(filter-out $@,$(MAKECMDGOALS))
-
-%:      # thanks to chakrit
-	@:    # thanks to William Pursell
 
 doc:
 	@echo "\033[32m----- You can view document in -----\033[0m"
