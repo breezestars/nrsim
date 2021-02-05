@@ -7,9 +7,9 @@
 **NRSIM** is the open-source tester for simulate 5G UE and gNB. It can be used for testing 5GC system.
 
 <p align="center">
-<img src="https://img.shields.io/badge/5G%20Radio%20Interface-in%20progress-orange" alt="OS Linux"/>
-<img src="https://img.shields.io/badge/Control%20Plane-functional-green" alt="OS Linux"/>  
-<img src="https://img.shields.io/badge/User%20Plane-functional-green" alt="OS Linux"/>
+<img src="https://img.shields.io/badge/5G%20NR%20Interface-in%20progress-orange" alt="OS Linux"/>
+<img src="https://img.shields.io/badge/UE-in%20progress-orange" alt="OS Linux"/>  
+<img src="https://img.shields.io/badge/User%20Plane-in%20progress-orange" alt="OS Linux"/>
 </p>
 
 ## Documentation
