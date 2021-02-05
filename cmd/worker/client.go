@@ -35,7 +35,7 @@ func createMasterGrpcClient() (api.SimMasterClient, func() error, error) {
 		Port: port,
 	}
 
-	debugLog.Printf("Got masterServerIp: %v", hostAddr.String())
+	infoLog.Printf("Connecting to master server: %v", hostAddr.String())
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()

@@ -29,7 +29,7 @@ func StartWorkerGrpcServer(ctx context.Context, srvPort int) error {
 	// Control gRPC server lifecycle
 	go func() {
 		<-ctx.Done()
-		infoLog.Print("Got notification to graceful stop CLI gRPC server.")
+		infoLog.Print("Got notification to stop CLI gRPC server.")
 		s.Stop()
 		return
 	}()
