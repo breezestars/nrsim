@@ -63,8 +63,6 @@ func (s *MasterServer) StreamChannel(stream api.SimMaster_StreamChannelServer) e
 
 	infoLog.Printf("IP: %v has finished registration", ip.String())
 
-	// TODO: use errgroup to refactor.
-
 	// Send heartbeat
 	wg.Add(1)
 	go func() {

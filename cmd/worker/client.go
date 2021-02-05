@@ -79,12 +79,21 @@ func register(ctx context.Context, client api.SimMasterClient) error {
 		return errors.Wrapf(err, "Get stream client failed")
 	}
 
+	// Control register cycle, trigger by ctx or connection error
 	go func() {
-		<-ctx.Done()
-		if err := stream.CloseSend(); err != nil {
-			infoLog.Printf("Close send failed, %v", err)
+		defer func() {
+			if err := stream.CloseSend(); err != nil {
+				infoLog.Printf("Close send failed, %v", err)
+			}
+		}()
+
+		select {
+		// Trigger due to ctx
+		case <-ctx.Done():
+			cancel()
+		// Trigger due to connection error
+		case <-ctx2.Done():
 		}
-		cancel()
 	}()
 
 	// Send heartbeat
