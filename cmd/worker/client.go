@@ -121,7 +121,7 @@ func register(ctx context.Context, client api.SimMasterClient) error {
 				if err != nil {
 					if errors.Is(err, io.EOF) {
 						// The connection is EOF
-						infoLog.Printf("Connection EOF: %v", err)
+						infoLog.Printf("Connection between master node status: %v", err)
 						return
 					} else {
 						errLog.Printf("Connection receive error: %v", err)

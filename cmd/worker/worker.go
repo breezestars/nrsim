@@ -4,10 +4,11 @@ import (
 	"context"
 	"flag"
 	"github.com/ng5gc/uegnbsim/internal/logger"
+	"github.com/pkg/errors"
+	"golang.org/x/sync/errgroup"
 	"log"
 	"os"
 	"os/signal"
-	"sync"
 	"syscall"
 )
 
@@ -32,11 +33,12 @@ func init() {
 
 func main() {
 	var (
-		wg  sync.WaitGroup
-		ctx context.Context
+		ctx    context.Context
+		cancel context.CancelFunc
+		eg     errgroup.Group
 	)
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel = context.WithCancel(context.Background())
 
 	// Listen ctrl+c to terminate all gRPC server
 	signalChannel := make(chan os.Signal, 1)
@@ -47,16 +49,16 @@ func main() {
 	}()
 
 	// Start gRPC server and prepare to be configure
-	wg.Add(1)
-	go func() {
-		defer func() {
-			wg.Done()
-		}()
-		if err := StartWorkerGrpcServer(ctx, workerServerPort); err != nil {
-			errLog.Printf(err.Error())
-			return
-		}
-	}()
+	eg.Go(
+		func() error {
+			defer func() {
+			}()
+			if err := StartWorkerGrpcServer(ctx, workerServerPort); err != nil {
+				return errors.Wrapf(err, "Start worker gRPC server failed")
+			}
+			return nil
+		},
+	)
 
 	// Create master gRPC client
 	client, connClose, err := createMasterGrpcClient()
@@ -72,5 +74,8 @@ func main() {
 		return
 	}
 
-	wg.Wait()
+	if err := eg.Wait(); err != nil {
+		errLog.Printf(err.Error())
+		signalChannel <- syscall.SIGTERM
+	}
 }

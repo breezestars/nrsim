@@ -4,10 +4,11 @@ import (
 	"context"
 	"flag"
 	"github.com/ng5gc/uegnbsim/internal/logger"
+	"github.com/pkg/errors"
+	"golang.org/x/sync/errgroup"
 	"log"
 	"os"
 	"os/signal"
-	"sync"
 	"syscall"
 )
 
@@ -31,11 +32,12 @@ func init() {
 }
 func main() {
 	var (
-		wg  sync.WaitGroup
-		ctx context.Context
+		ctx    context.Context
+		cancel context.CancelFunc
+		eg     errgroup.Group
 	)
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel = context.WithCancel(context.Background())
 
 	// Listen ctrl+c to terminate all gRPC server
 	signalChannel := make(chan os.Signal, 1)
@@ -46,22 +48,27 @@ func main() {
 	}()
 
 	// Start gRPC server and listen for register
-	wg.Add(1)
-	go func() {
-		if err := StartMasterGrpcServer(ctx, masterServerPort); err != nil {
-			errLog.Printf(err.Error())
-		}
-		wg.Done()
-	}()
+	eg.Go(
+		func() error {
+			if err := StartMasterGrpcServer(ctx, masterServerPort); err != nil {
+				return errors.Wrapf(err, "Start master gRPC server failed")
+			}
+			return nil
+		},
+	)
 
 	// Start gRPC server to listen CLI
-	wg.Add(1)
-	go func() {
-		if err := StartCLIGrpcServer(ctx, cliServerPort); err != nil {
-			errLog.Printf(err.Error())
-		}
-		wg.Done()
-	}()
+	eg.Go(
+		func() error {
+			if err := StartCLIGrpcServer(ctx, cliServerPort); err != nil {
+				return errors.Wrapf(err, "Start CLI gRPC server failed")
+			}
+			return nil
+		},
+	)
 
-	wg.Wait()
+	if err := eg.Wait(); err != nil {
+		errLog.Printf(err.Error())
+		signalChannel <- syscall.SIGTERM
+	}
 }

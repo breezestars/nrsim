@@ -16,11 +16,11 @@ cli:
 
 master:
 	@echo "\033[32m----- Running master -----\033[0m"
-	go run cmd/master/master.go cmd/master/server.go $(filter-out $@,$(MAKECMDGOALS))
+	go run cmd/master/master.go cmd/master/client.go cmd/master/server.go $(filter-out $@,$(MAKECMDGOALS))
 
 worker:
 	@echo "\033[32m----- Running worker -----\033[0m"
-	go run cmd/worker/worker.go cmd/worker/server.go $(filter-out $@,$(MAKECMDGOALS))
+	go run cmd/worker/worker.go cmd/worker/client.go cmd/worker/server.go -masterSrvIp=192.168.1.1:50051 $(filter-out $@,$(MAKECMDGOALS))
 
 test:
 	@echo $(filter-out $@,$(MAKECMDGOALS))
