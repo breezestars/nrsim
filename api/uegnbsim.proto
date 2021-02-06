@@ -27,10 +27,8 @@ service  sim_cli{
   rpc CreateUe (GnbConfig) returns (google.protobuf.Empty) {}
   rpc DelGnb (IdMessage) returns (google.protobuf.Empty) {}
   rpc DelUe (IdMessage) returns (google.protobuf.Empty) {}
-  rpc ListGnb (google.protobuf.Empty) returns (google.protobuf.Empty) {}
-  rpc ListUe (IdMessage) returns (google.protobuf.Empty) {}
-  rpc GetGnb (IdMessage) returns (google.protobuf.Empty) {}
-  rpc GetUe (IdMessage) returns (google.protobuf.Empty) {}
+  rpc ListGnb (google.protobuf.Empty) returns (GnbConfigList) {}
+  rpc ListUe (IdMessage) returns (UeConfigList) {}
   rpc StartUeRegister (IdMessage) returns (google.protobuf.Empty) {}
   rpc StartUeDeregister (IdMessage) returns (google.protobuf.Empty) {}
   rpc SetAction (ActionProfile) returns (google.protobuf.Empty) {}
@@ -39,7 +37,7 @@ service  sim_cli{
 }
 
 message IdMessage {
-  uint64 id = 1;
+  uint32 id = 1;
 }
 
 message NameMessage {
@@ -61,7 +59,16 @@ message Plmn {
 
 message Snssai {
   uint32 sst = 1;
-  string sd = 2;
+  uint32 sd = 2;
+}
+
+message UeConfigList {
+  uint32 gnbId = 1;
+  repeated UeConfig ueConfig = 2;
+}
+
+message GnbConfigList {
+  repeated GnbConfig gnbConfig = 1;
 }
 
 message GnbConfig {

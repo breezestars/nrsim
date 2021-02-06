@@ -16,7 +16,11 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"github.com/cmingou/nrsim/internal/api"
+	"google.golang.org/protobuf/types/known/emptypb"
+	"log"
 
 	"github.com/spf13/cobra"
 )
@@ -28,6 +32,31 @@ var nrGetCmd = &cobra.Command{
 	Long:  `A command to get NR.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("NR get called,\ngNB struct value is: \n%+v\n", nr)
+
+		ctx, cancel := context.WithTimeout(context.Background(), GrpcConnectTimeout)
+		defer cancel()
+
+		var gnbCfgList *api.GnbConfigList
+		client := GetCliServerClient()
+		gnbCfgList, err := client.ListGnb(ctx, &emptypb.Empty{})
+		if err != nil {
+			dealError(err)
+		}
+
+		if nr.gnbId == -1 {
+			// Print all NR
+			for _, v := range gnbCfgList.GnbConfig {
+				log.Printf("%+v\n", v.GlobalGNBID)
+			}
+		} else {
+			// Print specific NR
+			for _, v := range gnbCfgList.GnbConfig {
+				if v.GlobalGNBID.Gnbid == uint32(nr.gnbId) {
+					log.Printf("%+v\n", v.GlobalGNBID)
+					break
+				}
+			}
+		}
 	},
 }
 
@@ -43,5 +72,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	nrGetCmd.Flags().IntVarP(&nr.gnbId, "id", "i", 1, "Id of NR")
+	nrGetCmd.Flags().IntVarP(&nr.gnbId, "id", "i", -1, "Id of NR")
 }

@@ -478,10 +478,8 @@ type SimCliClient interface {
 	CreateUe(ctx context.Context, in *GnbConfig, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DelGnb(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DelUe(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	ListGnb(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	ListUe(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	GetGnb(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	GetUe(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListGnb(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GnbConfigList, error)
+	ListUe(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*UeConfigList, error)
 	StartUeRegister(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	StartUeDeregister(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SetAction(ctx context.Context, in *ActionProfile, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -533,8 +531,8 @@ func (c *simCliClient) DelUe(ctx context.Context, in *IdMessage, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *simCliClient) ListGnb(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *simCliClient) ListGnb(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GnbConfigList, error) {
+	out := new(GnbConfigList)
 	err := c.cc.Invoke(ctx, "/api.sim_cli/ListGnb", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -542,27 +540,9 @@ func (c *simCliClient) ListGnb(ctx context.Context, in *emptypb.Empty, opts ...g
 	return out, nil
 }
 
-func (c *simCliClient) ListUe(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *simCliClient) ListUe(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*UeConfigList, error) {
+	out := new(UeConfigList)
 	err := c.cc.Invoke(ctx, "/api.sim_cli/ListUe", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *simCliClient) GetGnb(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/api.sim_cli/GetGnb", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *simCliClient) GetUe(ctx context.Context, in *IdMessage, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/api.sim_cli/GetUe", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -622,10 +602,8 @@ type SimCliServer interface {
 	CreateUe(context.Context, *GnbConfig) (*emptypb.Empty, error)
 	DelGnb(context.Context, *IdMessage) (*emptypb.Empty, error)
 	DelUe(context.Context, *IdMessage) (*emptypb.Empty, error)
-	ListGnb(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	ListUe(context.Context, *IdMessage) (*emptypb.Empty, error)
-	GetGnb(context.Context, *IdMessage) (*emptypb.Empty, error)
-	GetUe(context.Context, *IdMessage) (*emptypb.Empty, error)
+	ListGnb(context.Context, *emptypb.Empty) (*GnbConfigList, error)
+	ListUe(context.Context, *IdMessage) (*UeConfigList, error)
 	StartUeRegister(context.Context, *IdMessage) (*emptypb.Empty, error)
 	StartUeDeregister(context.Context, *IdMessage) (*emptypb.Empty, error)
 	SetAction(context.Context, *ActionProfile) (*emptypb.Empty, error)
@@ -650,17 +628,11 @@ func (UnimplementedSimCliServer) DelGnb(context.Context, *IdMessage) (*emptypb.E
 func (UnimplementedSimCliServer) DelUe(context.Context, *IdMessage) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelUe not implemented")
 }
-func (UnimplementedSimCliServer) ListGnb(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+func (UnimplementedSimCliServer) ListGnb(context.Context, *emptypb.Empty) (*GnbConfigList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListGnb not implemented")
 }
-func (UnimplementedSimCliServer) ListUe(context.Context, *IdMessage) (*emptypb.Empty, error) {
+func (UnimplementedSimCliServer) ListUe(context.Context, *IdMessage) (*UeConfigList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUe not implemented")
-}
-func (UnimplementedSimCliServer) GetGnb(context.Context, *IdMessage) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetGnb not implemented")
-}
-func (UnimplementedSimCliServer) GetUe(context.Context, *IdMessage) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUe not implemented")
 }
 func (UnimplementedSimCliServer) StartUeRegister(context.Context, *IdMessage) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartUeRegister not implemented")
@@ -798,42 +770,6 @@ func _SimCli_ListUe_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SimCli_GetGnb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IdMessage)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SimCliServer).GetGnb(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.sim_cli/GetGnb",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SimCliServer).GetGnb(ctx, req.(*IdMessage))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SimCli_GetUe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IdMessage)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SimCliServer).GetUe(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.sim_cli/GetUe",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SimCliServer).GetUe(ctx, req.(*IdMessage))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _SimCli_StartUeRegister_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IdMessage)
 	if err := dec(in); err != nil {
@@ -954,14 +890,6 @@ var SimCli_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUe",
 			Handler:    _SimCli_ListUe_Handler,
-		},
-		{
-			MethodName: "GetGnb",
-			Handler:    _SimCli_GetGnb_Handler,
-		},
-		{
-			MethodName: "GetUe",
-			Handler:    _SimCli_GetUe_Handler,
 		},
 		{
 			MethodName: "StartUeRegister",

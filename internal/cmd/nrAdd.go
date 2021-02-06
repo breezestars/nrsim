@@ -16,8 +16,9 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
 	"fmt"
-
+	"github.com/cmingou/nrsim/internal/api"
 	"github.com/spf13/cobra"
 )
 
@@ -38,6 +39,47 @@ var nrAddCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("NR add called,\ngNB struct value is: \n%+v\n", nr)
 
+		cfg := &api.GnbConfig{
+			GlobalGNBID: &api.GnbConfig_GlobalGnbId{
+				Plmn: &api.Plmn{
+					Mcc: uint32(nr.mcc),
+					Mnc: uint32(nr.mnc),
+				},
+				Gnbid: uint32(nr.gnbId),
+			},
+			SupportedTAList: []*api.GnbConfig_SupportedTaList{
+				{
+					TAC: uint32(nr.tac),
+					BroadcastPLMNList: []*api.GnbConfig_BroadcastPlmnList{
+						{
+							Plmn: &api.Plmn{
+								Mcc: uint32(nr.mcc),
+								Mnc: uint32(nr.mnc),
+							},
+							SliceSupportList: []*api.Snssai{
+								{
+									Sst: uint32(nr.sst),
+									Sd:  uint32(nr.sd),
+								},
+							},
+						},
+					},
+				},
+			},
+			PagingDRX:   "",
+			RanUeNGAPId: uint32(nr.gnbId),
+			ULInfoNR:    nil,
+			Gtpu:        nil,
+			UE:          nil,
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), GrpcConnectTimeout)
+		defer cancel()
+
+		client := GetCliServerClient()
+		if _, err := client.CreateGnb(ctx, cfg); err != nil {
+			dealError(err)
+		}
 	},
 }
 

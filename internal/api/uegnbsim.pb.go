@@ -26,7 +26,7 @@ type IdMessage struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *IdMessage) Reset() {
@@ -61,7 +61,7 @@ func (*IdMessage) Descriptor() ([]byte, []int) {
 	return file_uegnbsim_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *IdMessage) GetId() uint64 {
+func (x *IdMessage) GetId() uint32 {
 	if x != nil {
 		return x.Id
 	}
@@ -270,7 +270,7 @@ type Snssai struct {
 	unknownFields protoimpl.UnknownFields
 
 	Sst uint32 `protobuf:"varint,1,opt,name=sst,proto3" json:"sst,omitempty"`
-	Sd  string `protobuf:"bytes,2,opt,name=sd,proto3" json:"sd,omitempty"`
+	Sd  uint32 `protobuf:"varint,2,opt,name=sd,proto3" json:"sd,omitempty"`
 }
 
 func (x *Snssai) Reset() {
@@ -312,11 +312,113 @@ func (x *Snssai) GetSst() uint32 {
 	return 0
 }
 
-func (x *Snssai) GetSd() string {
+func (x *Snssai) GetSd() uint32 {
 	if x != nil {
 		return x.Sd
 	}
-	return ""
+	return 0
+}
+
+type UeConfigList struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	GnbId    uint32      `protobuf:"varint,1,opt,name=gnbId,proto3" json:"gnbId,omitempty"`
+	UeConfig []*UeConfig `protobuf:"bytes,2,rep,name=ueConfig,proto3" json:"ueConfig,omitempty"`
+}
+
+func (x *UeConfigList) Reset() {
+	*x = UeConfigList{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_uegnbsim_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UeConfigList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UeConfigList) ProtoMessage() {}
+
+func (x *UeConfigList) ProtoReflect() protoreflect.Message {
+	mi := &file_uegnbsim_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UeConfigList.ProtoReflect.Descriptor instead.
+func (*UeConfigList) Descriptor() ([]byte, []int) {
+	return file_uegnbsim_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UeConfigList) GetGnbId() uint32 {
+	if x != nil {
+		return x.GnbId
+	}
+	return 0
+}
+
+func (x *UeConfigList) GetUeConfig() []*UeConfig {
+	if x != nil {
+		return x.UeConfig
+	}
+	return nil
+}
+
+type GnbConfigList struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	GnbConfig []*GnbConfig `protobuf:"bytes,1,rep,name=gnbConfig,proto3" json:"gnbConfig,omitempty"`
+}
+
+func (x *GnbConfigList) Reset() {
+	*x = GnbConfigList{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_uegnbsim_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GnbConfigList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GnbConfigList) ProtoMessage() {}
+
+func (x *GnbConfigList) ProtoReflect() protoreflect.Message {
+	mi := &file_uegnbsim_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GnbConfigList.ProtoReflect.Descriptor instead.
+func (*GnbConfigList) Descriptor() ([]byte, []int) {
+	return file_uegnbsim_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GnbConfigList) GetGnbConfig() []*GnbConfig {
+	if x != nil {
+		return x.GnbConfig
+	}
+	return nil
 }
 
 type GnbConfig struct {
@@ -339,7 +441,7 @@ type GnbConfig struct {
 func (x *GnbConfig) Reset() {
 	*x = GnbConfig{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[6]
+		mi := &file_uegnbsim_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -352,7 +454,7 @@ func (x *GnbConfig) String() string {
 func (*GnbConfig) ProtoMessage() {}
 
 func (x *GnbConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[6]
+	mi := &file_uegnbsim_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -365,7 +467,7 @@ func (x *GnbConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GnbConfig.ProtoReflect.Descriptor instead.
 func (*GnbConfig) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{6}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GnbConfig) GetGlobalGNBID() *GnbConfig_GlobalGnbId {
@@ -439,7 +541,7 @@ type UeConfig struct {
 func (x *UeConfig) Reset() {
 	*x = UeConfig{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[7]
+		mi := &file_uegnbsim_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -452,7 +554,7 @@ func (x *UeConfig) String() string {
 func (*UeConfig) ProtoMessage() {}
 
 func (x *UeConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[7]
+	mi := &file_uegnbsim_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -465,7 +567,7 @@ func (x *UeConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UeConfig.ProtoReflect.Descriptor instead.
 func (*UeConfig) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{7}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UeConfig) GetImeisv() string {
@@ -543,7 +645,7 @@ type GnbConfig_GlobalGnbId struct {
 func (x *GnbConfig_GlobalGnbId) Reset() {
 	*x = GnbConfig_GlobalGnbId{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[8]
+		mi := &file_uegnbsim_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -556,7 +658,7 @@ func (x *GnbConfig_GlobalGnbId) String() string {
 func (*GnbConfig_GlobalGnbId) ProtoMessage() {}
 
 func (x *GnbConfig_GlobalGnbId) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[8]
+	mi := &file_uegnbsim_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -569,7 +671,7 @@ func (x *GnbConfig_GlobalGnbId) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GnbConfig_GlobalGnbId.ProtoReflect.Descriptor instead.
 func (*GnbConfig_GlobalGnbId) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{6, 0}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{8, 0}
 }
 
 func (x *GnbConfig_GlobalGnbId) GetPlmn() *Plmn {
@@ -598,7 +700,7 @@ type GnbConfig_BroadcastPlmnList struct {
 func (x *GnbConfig_BroadcastPlmnList) Reset() {
 	*x = GnbConfig_BroadcastPlmnList{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[9]
+		mi := &file_uegnbsim_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -611,7 +713,7 @@ func (x *GnbConfig_BroadcastPlmnList) String() string {
 func (*GnbConfig_BroadcastPlmnList) ProtoMessage() {}
 
 func (x *GnbConfig_BroadcastPlmnList) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[9]
+	mi := &file_uegnbsim_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -624,7 +726,7 @@ func (x *GnbConfig_BroadcastPlmnList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GnbConfig_BroadcastPlmnList.ProtoReflect.Descriptor instead.
 func (*GnbConfig_BroadcastPlmnList) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{6, 1}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{8, 1}
 }
 
 func (x *GnbConfig_BroadcastPlmnList) GetPlmn() *Plmn {
@@ -653,7 +755,7 @@ type GnbConfig_SupportedTaList struct {
 func (x *GnbConfig_SupportedTaList) Reset() {
 	*x = GnbConfig_SupportedTaList{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[10]
+		mi := &file_uegnbsim_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -666,7 +768,7 @@ func (x *GnbConfig_SupportedTaList) String() string {
 func (*GnbConfig_SupportedTaList) ProtoMessage() {}
 
 func (x *GnbConfig_SupportedTaList) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[10]
+	mi := &file_uegnbsim_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -679,7 +781,7 @@ func (x *GnbConfig_SupportedTaList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GnbConfig_SupportedTaList.ProtoReflect.Descriptor instead.
 func (*GnbConfig_SupportedTaList) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{6, 2}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{8, 2}
 }
 
 func (x *GnbConfig_SupportedTaList) GetTAC() uint32 {
@@ -708,7 +810,7 @@ type GnbConfig_UlInfoNr struct {
 func (x *GnbConfig_UlInfoNr) Reset() {
 	*x = GnbConfig_UlInfoNr{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[11]
+		mi := &file_uegnbsim_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -721,7 +823,7 @@ func (x *GnbConfig_UlInfoNr) String() string {
 func (*GnbConfig_UlInfoNr) ProtoMessage() {}
 
 func (x *GnbConfig_UlInfoNr) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[11]
+	mi := &file_uegnbsim_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -734,7 +836,7 @@ func (x *GnbConfig_UlInfoNr) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GnbConfig_UlInfoNr.ProtoReflect.Descriptor instead.
 func (*GnbConfig_UlInfoNr) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{6, 3}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{8, 3}
 }
 
 func (x *GnbConfig_UlInfoNr) GetNRCGI() *GnbConfig_UlInfoNr_Nrcgi {
@@ -763,7 +865,7 @@ type GnbConfig_GTPu struct {
 func (x *GnbConfig_GTPu) Reset() {
 	*x = GnbConfig_GTPu{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[12]
+		mi := &file_uegnbsim_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -776,7 +878,7 @@ func (x *GnbConfig_GTPu) String() string {
 func (*GnbConfig_GTPu) ProtoMessage() {}
 
 func (x *GnbConfig_GTPu) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[12]
+	mi := &file_uegnbsim_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -789,7 +891,7 @@ func (x *GnbConfig_GTPu) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GnbConfig_GTPu.ProtoReflect.Descriptor instead.
 func (*GnbConfig_GTPu) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{6, 4}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{8, 4}
 }
 
 func (x *GnbConfig_GTPu) GetGTPuIfName() string {
@@ -818,7 +920,7 @@ type GnbConfig_UlInfoNr_Nrcgi struct {
 func (x *GnbConfig_UlInfoNr_Nrcgi) Reset() {
 	*x = GnbConfig_UlInfoNr_Nrcgi{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[13]
+		mi := &file_uegnbsim_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -831,7 +933,7 @@ func (x *GnbConfig_UlInfoNr_Nrcgi) String() string {
 func (*GnbConfig_UlInfoNr_Nrcgi) ProtoMessage() {}
 
 func (x *GnbConfig_UlInfoNr_Nrcgi) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[13]
+	mi := &file_uegnbsim_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -844,7 +946,7 @@ func (x *GnbConfig_UlInfoNr_Nrcgi) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GnbConfig_UlInfoNr_Nrcgi.ProtoReflect.Descriptor instead.
 func (*GnbConfig_UlInfoNr_Nrcgi) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{6, 3, 0}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{8, 3, 0}
 }
 
 func (x *GnbConfig_UlInfoNr_Nrcgi) GetPLMN() *Plmn {
@@ -873,7 +975,7 @@ type GnbConfig_UlInfoNr_Tai struct {
 func (x *GnbConfig_UlInfoNr_Tai) Reset() {
 	*x = GnbConfig_UlInfoNr_Tai{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[14]
+		mi := &file_uegnbsim_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -886,7 +988,7 @@ func (x *GnbConfig_UlInfoNr_Tai) String() string {
 func (*GnbConfig_UlInfoNr_Tai) ProtoMessage() {}
 
 func (x *GnbConfig_UlInfoNr_Tai) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[14]
+	mi := &file_uegnbsim_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -899,7 +1001,7 @@ func (x *GnbConfig_UlInfoNr_Tai) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GnbConfig_UlInfoNr_Tai.ProtoReflect.Descriptor instead.
 func (*GnbConfig_UlInfoNr_Tai) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{6, 3, 1}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{8, 3, 1}
 }
 
 func (x *GnbConfig_UlInfoNr_Tai) GetPLMN() *Plmn {
@@ -928,7 +1030,7 @@ type UeConfig_AuthParam struct {
 func (x *UeConfig_AuthParam) Reset() {
 	*x = UeConfig_AuthParam{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_uegnbsim_proto_msgTypes[15]
+		mi := &file_uegnbsim_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -941,7 +1043,7 @@ func (x *UeConfig_AuthParam) String() string {
 func (*UeConfig_AuthParam) ProtoMessage() {}
 
 func (x *UeConfig_AuthParam) ProtoReflect() protoreflect.Message {
-	mi := &file_uegnbsim_proto_msgTypes[15]
+	mi := &file_uegnbsim_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -954,7 +1056,7 @@ func (x *UeConfig_AuthParam) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UeConfig_AuthParam.ProtoReflect.Descriptor instead.
 func (*UeConfig_AuthParam) Descriptor() ([]byte, []int) {
-	return file_uegnbsim_proto_rawDescGZIP(), []int{7, 0}
+	return file_uegnbsim_proto_rawDescGZIP(), []int{9, 0}
 }
 
 func (x *UeConfig_AuthParam) GetK() string {
@@ -978,7 +1080,7 @@ var file_uegnbsim_proto_rawDesc = []byte{
 	0x12, 0x03, 0x61, 0x70, 0x69, 0x1a, 0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x22, 0x1b, 0x0a, 0x09, 0x49, 0x64, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12,
-	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x02, 0x69, 0x64, 0x22,
 	0x21, 0x0a, 0x0b, 0x4e, 0x61, 0x6d, 0x65, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12,
 	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
 	0x6d, 0x65, 0x22, 0x21, 0x0a, 0x0d, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66,
@@ -990,7 +1092,16 @@ var file_uegnbsim_proto_rawDesc = []byte{
 	0x63, 0x12, 0x10, 0x0a, 0x03, 0x6d, 0x6e, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x03,
 	0x6d, 0x6e, 0x63, 0x22, 0x2a, 0x0a, 0x06, 0x53, 0x6e, 0x73, 0x73, 0x61, 0x69, 0x12, 0x10, 0x0a,
 	0x03, 0x73, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x03, 0x73, 0x73, 0x74, 0x12,
-	0x0e, 0x0a, 0x02, 0x73, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x73, 0x64, 0x22,
+	0x0e, 0x0a, 0x02, 0x73, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x02, 0x73, 0x64, 0x22,
+	0x4f, 0x0a, 0x0c, 0x55, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x4c, 0x69, 0x73, 0x74, 0x12,
+	0x14, 0x0a, 0x05, 0x67, 0x6e, 0x62, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x05,
+	0x67, 0x6e, 0x62, 0x49, 0x64, 0x12, 0x29, 0x0a, 0x08, 0x75, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69,
+	0x67, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x55, 0x65,
+	0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x08, 0x75, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x22, 0x3d, 0x0a, 0x0d, 0x47, 0x6e, 0x62, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x4c, 0x69, 0x73,
+	0x74, 0x12, 0x2c, 0x0a, 0x09, 0x67, 0x6e, 0x62, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x47, 0x6e, 0x62, 0x43, 0x6f,
+	0x6e, 0x66, 0x69, 0x67, 0x52, 0x09, 0x67, 0x6e, 0x62, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22,
 	0xa7, 0x07, 0x0a, 0x09, 0x47, 0x6e, 0x62, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x3c, 0x0a,
 	0x0b, 0x47, 0x6c, 0x6f, 0x62, 0x61, 0x6c, 0x47, 0x4e, 0x42, 0x49, 0x44, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x47, 0x6e, 0x62, 0x43, 0x6f, 0x6e, 0x66,
@@ -1108,7 +1219,7 @@ var file_uegnbsim_proto_rawDesc = []byte{
 	0x6e, 0x6e, 0x65, 0x6c, 0x12, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x16, 0x2e, 0x67,
 	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45,
-	0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x32, 0xdd, 0x05, 0x0a, 0x07, 0x73,
+	0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x32, 0xed, 0x04, 0x0a, 0x07, 0x73,
 	0x69, 0x6d, 0x5f, 0x63, 0x6c, 0x69, 0x12, 0x35, 0x0a, 0x09, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
 	0x47, 0x6e, 0x62, 0x12, 0x0e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x47, 0x6e, 0x62, 0x43, 0x6f, 0x6e,
 	0x66, 0x69, 0x67, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
@@ -1122,20 +1233,13 @@ var file_uegnbsim_proto_rawDesc = []byte{
 	0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x31, 0x0a, 0x05, 0x44, 0x65, 0x6c, 0x55, 0x65,
 	0x12, 0x0e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x64, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
 	0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x3b, 0x0a, 0x07, 0x4c, 0x69,
+	0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x37, 0x0a, 0x07, 0x4c, 0x69,
 	0x73, 0x74, 0x47, 0x6e, 0x62, 0x12, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x16, 0x2e,
-	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x32, 0x0a, 0x06, 0x4c, 0x69, 0x73, 0x74, 0x55,
-	0x65, 0x12, 0x0e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x64, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
-	0x65, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x32, 0x0a, 0x06, 0x47,
-	0x65, 0x74, 0x47, 0x6e, 0x62, 0x12, 0x0e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x64, 0x4d, 0x65,
-	0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12,
-	0x31, 0x0a, 0x05, 0x47, 0x65, 0x74, 0x55, 0x65, 0x12, 0x0e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49,
-	0x64, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
-	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x12, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x47, 0x6e, 0x62, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x4c, 0x69, 0x73,
+	0x74, 0x22, 0x00, 0x12, 0x2d, 0x0a, 0x06, 0x4c, 0x69, 0x73, 0x74, 0x55, 0x65, 0x12, 0x0e, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x49, 0x64, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x11, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x55, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x4c, 0x69, 0x73, 0x74,
 	0x22, 0x00, 0x12, 0x3b, 0x0a, 0x0f, 0x53, 0x74, 0x61, 0x72, 0x74, 0x55, 0x65, 0x52, 0x65, 0x67,
 	0x69, 0x73, 0x74, 0x65, 0x72, 0x12, 0x0e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x49, 0x64, 0x4d, 0x65,
 	0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
@@ -1171,7 +1275,7 @@ func file_uegnbsim_proto_rawDescGZIP() []byte {
 	return file_uegnbsim_proto_rawDescData
 }
 
-var file_uegnbsim_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_uegnbsim_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_uegnbsim_proto_goTypes = []interface{}{
 	(*IdMessage)(nil),                   // 0: api.IdMessage
 	(*NameMessage)(nil),                 // 1: api.NameMessage
@@ -1179,84 +1283,84 @@ var file_uegnbsim_proto_goTypes = []interface{}{
 	(*RegisterConfig)(nil),              // 3: api.RegisterConfig
 	(*Plmn)(nil),                        // 4: api.Plmn
 	(*Snssai)(nil),                      // 5: api.Snssai
-	(*GnbConfig)(nil),                   // 6: api.GnbConfig
-	(*UeConfig)(nil),                    // 7: api.UeConfig
-	(*GnbConfig_GlobalGnbId)(nil),       // 8: api.GnbConfig.GlobalGnbId
-	(*GnbConfig_BroadcastPlmnList)(nil), // 9: api.GnbConfig.BroadcastPlmnList
-	(*GnbConfig_SupportedTaList)(nil),   // 10: api.GnbConfig.SupportedTaList
-	(*GnbConfig_UlInfoNr)(nil),          // 11: api.GnbConfig.UlInfoNr
-	(*GnbConfig_GTPu)(nil),              // 12: api.GnbConfig.GTPu
-	(*GnbConfig_UlInfoNr_Nrcgi)(nil),    // 13: api.GnbConfig.UlInfoNr.Nrcgi
-	(*GnbConfig_UlInfoNr_Tai)(nil),      // 14: api.GnbConfig.UlInfoNr.Tai
-	(*UeConfig_AuthParam)(nil),          // 15: api.UeConfig.AuthParam
-	(*emptypb.Empty)(nil),               // 16: google.protobuf.Empty
+	(*UeConfigList)(nil),                // 6: api.UeConfigList
+	(*GnbConfigList)(nil),               // 7: api.GnbConfigList
+	(*GnbConfig)(nil),                   // 8: api.GnbConfig
+	(*UeConfig)(nil),                    // 9: api.UeConfig
+	(*GnbConfig_GlobalGnbId)(nil),       // 10: api.GnbConfig.GlobalGnbId
+	(*GnbConfig_BroadcastPlmnList)(nil), // 11: api.GnbConfig.BroadcastPlmnList
+	(*GnbConfig_SupportedTaList)(nil),   // 12: api.GnbConfig.SupportedTaList
+	(*GnbConfig_UlInfoNr)(nil),          // 13: api.GnbConfig.UlInfoNr
+	(*GnbConfig_GTPu)(nil),              // 14: api.GnbConfig.GTPu
+	(*GnbConfig_UlInfoNr_Nrcgi)(nil),    // 15: api.GnbConfig.UlInfoNr.Nrcgi
+	(*GnbConfig_UlInfoNr_Tai)(nil),      // 16: api.GnbConfig.UlInfoNr.Tai
+	(*UeConfig_AuthParam)(nil),          // 17: api.UeConfig.AuthParam
+	(*emptypb.Empty)(nil),               // 18: google.protobuf.Empty
 }
 var file_uegnbsim_proto_depIdxs = []int32{
-	8,  // 0: api.GnbConfig.GlobalGNBID:type_name -> api.GnbConfig.GlobalGnbId
-	10, // 1: api.GnbConfig.SupportedTAList:type_name -> api.GnbConfig.SupportedTaList
-	11, // 2: api.GnbConfig.ULInfoNR:type_name -> api.GnbConfig.UlInfoNr
-	12, // 3: api.GnbConfig.Gtpu:type_name -> api.GnbConfig.GTPu
-	7,  // 4: api.GnbConfig.UE:type_name -> api.UeConfig
-	4,  // 5: api.UeConfig.plmn:type_name -> api.Plmn
-	15, // 6: api.UeConfig.AuthParameter:type_name -> api.UeConfig.AuthParam
-	5,  // 7: api.UeConfig.snssai:type_name -> api.Snssai
-	4,  // 8: api.GnbConfig.GlobalGnbId.plmn:type_name -> api.Plmn
-	4,  // 9: api.GnbConfig.BroadcastPlmnList.plmn:type_name -> api.Plmn
-	5,  // 10: api.GnbConfig.BroadcastPlmnList.SliceSupportList:type_name -> api.Snssai
-	9,  // 11: api.GnbConfig.SupportedTaList.BroadcastPLMNList:type_name -> api.GnbConfig.BroadcastPlmnList
-	13, // 12: api.GnbConfig.UlInfoNr.NRCGI:type_name -> api.GnbConfig.UlInfoNr.Nrcgi
-	14, // 13: api.GnbConfig.UlInfoNr.TAI:type_name -> api.GnbConfig.UlInfoNr.Tai
-	4,  // 14: api.GnbConfig.UlInfoNr.Nrcgi.PLMN:type_name -> api.Plmn
-	4,  // 15: api.GnbConfig.UlInfoNr.Tai.PLMN:type_name -> api.Plmn
-	6,  // 16: api.sim_worker.InitGnb:input_type -> api.GnbConfig
-	6,  // 17: api.sim_worker.InitUe:input_type -> api.GnbConfig
-	16, // 18: api.sim_worker.GetConfig:input_type -> google.protobuf.Empty
-	16, // 19: api.sim_worker.StartUeRegister:input_type -> google.protobuf.Empty
-	16, // 20: api.sim_worker.StartUeDeregister:input_type -> google.protobuf.Empty
-	2,  // 21: api.sim_worker.SetAction:input_type -> api.ActionProfile
-	16, // 22: api.sim_worker.StartAction:input_type -> google.protobuf.Empty
-	16, // 23: api.sim_worker.StopAction:input_type -> google.protobuf.Empty
-	16, // 24: api.sim_master.StreamChannel:input_type -> google.protobuf.Empty
-	6,  // 25: api.sim_cli.CreateGnb:input_type -> api.GnbConfig
-	6,  // 26: api.sim_cli.CreateUe:input_type -> api.GnbConfig
-	0,  // 27: api.sim_cli.DelGnb:input_type -> api.IdMessage
-	0,  // 28: api.sim_cli.DelUe:input_type -> api.IdMessage
-	16, // 29: api.sim_cli.ListGnb:input_type -> google.protobuf.Empty
-	0,  // 30: api.sim_cli.ListUe:input_type -> api.IdMessage
-	0,  // 31: api.sim_cli.GetGnb:input_type -> api.IdMessage
-	0,  // 32: api.sim_cli.GetUe:input_type -> api.IdMessage
+	9,  // 0: api.UeConfigList.ueConfig:type_name -> api.UeConfig
+	8,  // 1: api.GnbConfigList.gnbConfig:type_name -> api.GnbConfig
+	10, // 2: api.GnbConfig.GlobalGNBID:type_name -> api.GnbConfig.GlobalGnbId
+	12, // 3: api.GnbConfig.SupportedTAList:type_name -> api.GnbConfig.SupportedTaList
+	13, // 4: api.GnbConfig.ULInfoNR:type_name -> api.GnbConfig.UlInfoNr
+	14, // 5: api.GnbConfig.Gtpu:type_name -> api.GnbConfig.GTPu
+	9,  // 6: api.GnbConfig.UE:type_name -> api.UeConfig
+	4,  // 7: api.UeConfig.plmn:type_name -> api.Plmn
+	17, // 8: api.UeConfig.AuthParameter:type_name -> api.UeConfig.AuthParam
+	5,  // 9: api.UeConfig.snssai:type_name -> api.Snssai
+	4,  // 10: api.GnbConfig.GlobalGnbId.plmn:type_name -> api.Plmn
+	4,  // 11: api.GnbConfig.BroadcastPlmnList.plmn:type_name -> api.Plmn
+	5,  // 12: api.GnbConfig.BroadcastPlmnList.SliceSupportList:type_name -> api.Snssai
+	11, // 13: api.GnbConfig.SupportedTaList.BroadcastPLMNList:type_name -> api.GnbConfig.BroadcastPlmnList
+	15, // 14: api.GnbConfig.UlInfoNr.NRCGI:type_name -> api.GnbConfig.UlInfoNr.Nrcgi
+	16, // 15: api.GnbConfig.UlInfoNr.TAI:type_name -> api.GnbConfig.UlInfoNr.Tai
+	4,  // 16: api.GnbConfig.UlInfoNr.Nrcgi.PLMN:type_name -> api.Plmn
+	4,  // 17: api.GnbConfig.UlInfoNr.Tai.PLMN:type_name -> api.Plmn
+	8,  // 18: api.sim_worker.InitGnb:input_type -> api.GnbConfig
+	8,  // 19: api.sim_worker.InitUe:input_type -> api.GnbConfig
+	18, // 20: api.sim_worker.GetConfig:input_type -> google.protobuf.Empty
+	18, // 21: api.sim_worker.StartUeRegister:input_type -> google.protobuf.Empty
+	18, // 22: api.sim_worker.StartUeDeregister:input_type -> google.protobuf.Empty
+	2,  // 23: api.sim_worker.SetAction:input_type -> api.ActionProfile
+	18, // 24: api.sim_worker.StartAction:input_type -> google.protobuf.Empty
+	18, // 25: api.sim_worker.StopAction:input_type -> google.protobuf.Empty
+	18, // 26: api.sim_master.StreamChannel:input_type -> google.protobuf.Empty
+	8,  // 27: api.sim_cli.CreateGnb:input_type -> api.GnbConfig
+	8,  // 28: api.sim_cli.CreateUe:input_type -> api.GnbConfig
+	0,  // 29: api.sim_cli.DelGnb:input_type -> api.IdMessage
+	0,  // 30: api.sim_cli.DelUe:input_type -> api.IdMessage
+	18, // 31: api.sim_cli.ListGnb:input_type -> google.protobuf.Empty
+	0,  // 32: api.sim_cli.ListUe:input_type -> api.IdMessage
 	0,  // 33: api.sim_cli.StartUeRegister:input_type -> api.IdMessage
 	0,  // 34: api.sim_cli.StartUeDeregister:input_type -> api.IdMessage
 	2,  // 35: api.sim_cli.SetAction:input_type -> api.ActionProfile
 	0,  // 36: api.sim_cli.StartAction:input_type -> api.IdMessage
 	0,  // 37: api.sim_cli.StopAction:input_type -> api.IdMessage
-	16, // 38: api.sim_worker.InitGnb:output_type -> google.protobuf.Empty
-	16, // 39: api.sim_worker.InitUe:output_type -> google.protobuf.Empty
-	6,  // 40: api.sim_worker.GetConfig:output_type -> api.GnbConfig
-	16, // 41: api.sim_worker.StartUeRegister:output_type -> google.protobuf.Empty
-	16, // 42: api.sim_worker.StartUeDeregister:output_type -> google.protobuf.Empty
-	16, // 43: api.sim_worker.SetAction:output_type -> google.protobuf.Empty
-	16, // 44: api.sim_worker.StartAction:output_type -> google.protobuf.Empty
-	16, // 45: api.sim_worker.StopAction:output_type -> google.protobuf.Empty
-	16, // 46: api.sim_master.StreamChannel:output_type -> google.protobuf.Empty
-	16, // 47: api.sim_cli.CreateGnb:output_type -> google.protobuf.Empty
-	16, // 48: api.sim_cli.CreateUe:output_type -> google.protobuf.Empty
-	16, // 49: api.sim_cli.DelGnb:output_type -> google.protobuf.Empty
-	16, // 50: api.sim_cli.DelUe:output_type -> google.protobuf.Empty
-	16, // 51: api.sim_cli.ListGnb:output_type -> google.protobuf.Empty
-	16, // 52: api.sim_cli.ListUe:output_type -> google.protobuf.Empty
-	16, // 53: api.sim_cli.GetGnb:output_type -> google.protobuf.Empty
-	16, // 54: api.sim_cli.GetUe:output_type -> google.protobuf.Empty
-	16, // 55: api.sim_cli.StartUeRegister:output_type -> google.protobuf.Empty
-	16, // 56: api.sim_cli.StartUeDeregister:output_type -> google.protobuf.Empty
-	16, // 57: api.sim_cli.SetAction:output_type -> google.protobuf.Empty
-	16, // 58: api.sim_cli.StartAction:output_type -> google.protobuf.Empty
-	16, // 59: api.sim_cli.StopAction:output_type -> google.protobuf.Empty
-	38, // [38:60] is the sub-list for method output_type
-	16, // [16:38] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	18, // 38: api.sim_worker.InitGnb:output_type -> google.protobuf.Empty
+	18, // 39: api.sim_worker.InitUe:output_type -> google.protobuf.Empty
+	8,  // 40: api.sim_worker.GetConfig:output_type -> api.GnbConfig
+	18, // 41: api.sim_worker.StartUeRegister:output_type -> google.protobuf.Empty
+	18, // 42: api.sim_worker.StartUeDeregister:output_type -> google.protobuf.Empty
+	18, // 43: api.sim_worker.SetAction:output_type -> google.protobuf.Empty
+	18, // 44: api.sim_worker.StartAction:output_type -> google.protobuf.Empty
+	18, // 45: api.sim_worker.StopAction:output_type -> google.protobuf.Empty
+	18, // 46: api.sim_master.StreamChannel:output_type -> google.protobuf.Empty
+	18, // 47: api.sim_cli.CreateGnb:output_type -> google.protobuf.Empty
+	18, // 48: api.sim_cli.CreateUe:output_type -> google.protobuf.Empty
+	18, // 49: api.sim_cli.DelGnb:output_type -> google.protobuf.Empty
+	18, // 50: api.sim_cli.DelUe:output_type -> google.protobuf.Empty
+	7,  // 51: api.sim_cli.ListGnb:output_type -> api.GnbConfigList
+	6,  // 52: api.sim_cli.ListUe:output_type -> api.UeConfigList
+	18, // 53: api.sim_cli.StartUeRegister:output_type -> google.protobuf.Empty
+	18, // 54: api.sim_cli.StartUeDeregister:output_type -> google.protobuf.Empty
+	18, // 55: api.sim_cli.SetAction:output_type -> google.protobuf.Empty
+	18, // 56: api.sim_cli.StartAction:output_type -> google.protobuf.Empty
+	18, // 57: api.sim_cli.StopAction:output_type -> google.protobuf.Empty
+	38, // [38:58] is the sub-list for method output_type
+	18, // [18:38] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_uegnbsim_proto_init() }
@@ -1338,7 +1442,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GnbConfig); i {
+			switch v := v.(*UeConfigList); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1350,7 +1454,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UeConfig); i {
+			switch v := v.(*GnbConfigList); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1362,7 +1466,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GnbConfig_GlobalGnbId); i {
+			switch v := v.(*GnbConfig); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1374,7 +1478,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GnbConfig_BroadcastPlmnList); i {
+			switch v := v.(*UeConfig); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1386,7 +1490,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GnbConfig_SupportedTaList); i {
+			switch v := v.(*GnbConfig_GlobalGnbId); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1398,7 +1502,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GnbConfig_UlInfoNr); i {
+			switch v := v.(*GnbConfig_BroadcastPlmnList); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1410,7 +1514,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GnbConfig_GTPu); i {
+			switch v := v.(*GnbConfig_SupportedTaList); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1422,7 +1526,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GnbConfig_UlInfoNr_Nrcgi); i {
+			switch v := v.(*GnbConfig_UlInfoNr); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1434,7 +1538,7 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GnbConfig_UlInfoNr_Tai); i {
+			switch v := v.(*GnbConfig_GTPu); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1446,6 +1550,30 @@ func file_uegnbsim_proto_init() {
 			}
 		}
 		file_uegnbsim_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GnbConfig_UlInfoNr_Nrcgi); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_uegnbsim_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GnbConfig_UlInfoNr_Tai); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_uegnbsim_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UeConfig_AuthParam); i {
 			case 0:
 				return &v.state
@@ -1464,7 +1592,7 @@ func file_uegnbsim_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_uegnbsim_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   3,
 		},

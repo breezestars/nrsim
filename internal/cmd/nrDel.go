@@ -16,8 +16,9 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
 	"fmt"
-
+	"github.com/cmingou/nrsim/internal/api"
 	"github.com/spf13/cobra"
 )
 
@@ -28,6 +29,16 @@ var nrDelCmd = &cobra.Command{
 	Long:  `A command to del NR.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("NR del called,\ngNB struct value is: \n%+v\n", nr)
+
+		id := &api.IdMessage{Id: uint32(nr.gnbId)}
+
+		ctx, cancel := context.WithTimeout(context.Background(), GrpcConnectTimeout)
+		defer cancel()
+
+		client := GetCliServerClient()
+		if _, err := client.DelGnb(ctx, id); err != nil {
+			dealError(err)
+		}
 	},
 }
 
