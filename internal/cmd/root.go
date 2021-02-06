@@ -30,6 +30,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "nrsim",
 	Short: "A brief description of your application",
+	Version: "1.0",
 	Long: `A CLI can control nrsim master.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:

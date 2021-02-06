@@ -24,15 +24,10 @@ import (
 // setCmd represents the set command
 var nrSetCmd = &cobra.Command{
 	Use:   "set",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Set NR",
+	Long:  `A command to set NR.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("set called")
+		fmt.Printf("NR set called,\ngNB struct value is: \n%+v\n", nr)
 	},
 }
 
@@ -48,4 +43,11 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// setCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	nrSetCmd.Flags().IntVarP(&nr.gnbId, "id", "i", 1, "Id of NR")
+	nrSetCmd.Flags().IntVar(&nr.mcc, "mcc", 208, "MCC")
+	nrSetCmd.Flags().IntVar(&nr.mnc, "mnc", 93, "MNC")
+	nrSetCmd.Flags().IntVar(&nr.tac, "tac", 1, "TAC")
+	nrSetCmd.Flags().IntVar(&nr.sst, "sst", 1, "SST")
+	nrSetCmd.Flags().IntVar(&nr.sd, "sd", 1, "SD")
+
 }

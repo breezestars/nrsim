@@ -24,15 +24,10 @@ import (
 // nrGetCmd represents the get command
 var nrGetCmd = &cobra.Command{
 	Use:   "get",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Get NR",
+	Long:  `A command to get NR.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("get called")
+		fmt.Printf("NR get called,\ngNB struct value is: \n%+v\n", nr)
 	},
 }
 
@@ -48,4 +43,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	nrGetCmd.Flags().IntVarP(&nr.gnbId, "id", "i", 1, "Id of NR")
 }

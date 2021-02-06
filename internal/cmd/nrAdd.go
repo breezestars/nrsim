@@ -21,18 +21,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type Nr struct {
+	gnbId int
+	mcc   int
+	mnc   int
+	tac   int
+	sst   int
+	sd    int
+}
+
 // nrAddCmd represents the add command
 var nrAddCmd = &cobra.Command{
 	Use:   "add",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Add NR",
+	Long:  `A command to add NR.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("add called")
+		fmt.Printf("NR add called,\ngNB struct value is: \n%+v\n", nr)
+
 	},
 }
 
@@ -48,4 +53,11 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	nrAddCmd.Flags().IntVarP(&nr.gnbId, "id", "i", 1, "Id of NR")
+	nrAddCmd.Flags().IntVar(&nr.mcc, "mcc", 208, "MCC")
+	nrAddCmd.Flags().IntVar(&nr.mnc, "mnc", 93, "MNC")
+	nrAddCmd.Flags().IntVar(&nr.tac, "tac", 1, "TAC")
+	nrAddCmd.Flags().IntVar(&nr.sst, "sst", 1, "SST")
+	nrAddCmd.Flags().IntVar(&nr.sd, "sd", 1, "SD")
+
 }

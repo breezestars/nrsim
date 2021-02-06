@@ -16,19 +16,18 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+)
+
+var (
+	nr Nr
 )
 
 // nrCmd represents the nr command
 var nrCmd = &cobra.Command{
 	Use:   "nr",
 	Short: "NR, New Radio",
-	Long: `NR, New Radio.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("nr called")
-	},
+	Long:  `NR, New Radio.`,
 }
 
 func init() {
