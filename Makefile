@@ -16,7 +16,7 @@ cli:
 
 master:
 	@echo "\033[32m----- Running master -----\033[0m"
-	go run cmd/master/master.go cmd/master/client.go cmd/master/server.go
+	go run cmd/master/master.go cmd/master/client.go cmd/master/server.go cmd/master/container.go
 
 worker:
 	@echo "\033[32m----- Running worker -----\033[0m"
