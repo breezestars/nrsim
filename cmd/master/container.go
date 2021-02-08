@@ -5,9 +5,15 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
+	"github.com/docker/docker/api/types/strslice"
 	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
 	"strconv"
+)
+
+const (
+	ContainerImageName  = "breezestars/nrsim:dev"
+	MasterServerAddress = "172.17.0.1:50051"
 )
 
 func (s *CLIServer) GetContainerClient() *client.Client {
@@ -27,11 +33,12 @@ func (s *CLIServer) GenContainerName(gNBId uint32) string {
 }
 
 func (s *CLIServer) NewWorker(contName string) error {
-	cont, err := s.containerClient.ContainerCreate(context.Background(),
+	cont, err := s.GetContainerClient().ContainerCreate(context.Background(),
 		&container.Config{
-			Image: "breezestars/nrsim",
+			Image: ContainerImageName,
+			Cmd:   strslice.StrSlice{"-masterSrvIp", MasterServerAddress},
 		},
-		nil,
+		&container.HostConfig{},
 		&network.NetworkingConfig{},
 		nil,
 		contName,
@@ -41,8 +48,8 @@ func (s *CLIServer) NewWorker(contName string) error {
 		return errors.Wrapf(err, "Create worker contaienr failed")
 	}
 
-	if err := s.containerClient.ContainerStart(context.Background(), cont.ID, types.ContainerStartOptions{}); err != nil {
-		if err := s.containerClient.ContainerRemove(context.Background(), cont.ID, types.ContainerRemoveOptions{}); err != nil {
+	if err := s.GetContainerClient().ContainerStart(context.Background(), cont.ID, types.ContainerStartOptions{}); err != nil {
+		if err := s.GetContainerClient().ContainerRemove(context.Background(), cont.ID, types.ContainerRemoveOptions{}); err != nil {
 			panic(err)
 		}
 		return errors.Wrapf(err, "Start worker contaienr failed")

@@ -119,7 +119,7 @@ func (s *MasterServer) StreamChannel(stream api.SimMaster_StreamChannelServer) e
 					return
 				}
 			}
-			debugLog.Printf("Conn is normal")
+			debugLog.Printf("Connection between with %v is normal", ip.String())
 		}
 	}(err)
 
