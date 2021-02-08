@@ -19,10 +19,13 @@ package main
 import (
 	"context"
 	"github.com/cmingou/nrsim/internal/api"
+	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"io"
 	"net"
@@ -152,6 +155,9 @@ func StartMasterGrpcServer(ctx context.Context, srvPort int) error {
 
 type CLIServer struct {
 	api.UnimplementedSimCliServer
+
+	NrMap           sync.Map
+	containerClient *client.Client
 }
 
 func StartCLIGrpcServer(ctx context.Context, srvPort int) error {
@@ -178,4 +184,51 @@ func StartCLIGrpcServer(ctx context.Context, srvPort int) error {
 		return errors.Wrap(err, "Failed to start CLI gRPC server")
 	}
 	return nil
+}
+
+func (s *CLIServer) CreateGnb(ctx context.Context, cfg *api.GnbConfig) (*emptypb.Empty, error) {
+	contName := s.GenContainerName(cfg.GlobalGNBID.Gnbid)
+
+	if _, found := s.NrMap.Load(contName); found {
+		return &emptypb.Empty{}, status.New(codes.AlreadyExists, "NR already existed.").Err()
+	}
+
+	if err := s.NewWorker(contName); err != nil {
+		return &emptypb.Empty{}, status.New(codes.Canceled, "New worker failed.").Err()
+	}
+
+	// TODO: Should check the integrity of cfg
+	s.NrMap.Store(contName, cfg)
+
+	return &emptypb.Empty{}, nil
+}
+
+func (s *CLIServer) DelGnb(ctx context.Context, id *api.IdMessage) (*emptypb.Empty, error) {
+	contName := s.GenContainerName(id.Id)
+
+	// If found then delete, if not found then return nil.
+	// TODO: Change to LoadAndDelete func when the issue been fix,
+	// https://github.com/golang/go/issues/40999
+	if _, found := s.NrMap.Load(contName); found {
+		s.NrMap.Delete(contName)
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
+func (s *CLIServer) ListGnb(ctx context.Context, empty *emptypb.Empty) (*api.GnbConfigList, error) {
+	var (
+		cfgList = &api.GnbConfigList{
+			GnbConfig: make([]*api.GnbConfig, 0),
+		}
+	)
+
+	s.NrMap.Range(
+		func(key, value interface{}) bool {
+			cfgList.GnbConfig = append(cfgList.GnbConfig, value.(*api.GnbConfig))
+			return true
+		},
+	)
+
+	return cfgList, nil
 }
