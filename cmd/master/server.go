@@ -193,12 +193,16 @@ func (s *CLIServer) CreateGnb(ctx context.Context, cfg *api.GnbConfig) (*emptypb
 		return &emptypb.Empty{}, status.New(codes.AlreadyExists, "NR already existed.").Err()
 	}
 
-	if err := s.NewWorker(contName); err != nil {
+	contId, err := s.NewWorker(contName)
+	if err != nil {
 		return &emptypb.Empty{}, status.New(codes.Canceled, "New worker failed.").Err()
 	}
 
 	// TODO: Should check the integrity of cfg
-	s.NrMap.Store(contName, cfg)
+	s.NrMap.Store(contName, &GnbConfig{
+		ContainerId: contId,
+		Config:      cfg,
+	})
 
 	return &emptypb.Empty{}, nil
 }
@@ -209,7 +213,12 @@ func (s *CLIServer) DelGnb(ctx context.Context, id *api.IdMessage) (*emptypb.Emp
 	// If found then delete, if not found then return nil.
 	// TODO: Change to LoadAndDelete func when the issue been fix,
 	// https://github.com/golang/go/issues/40999
-	if _, found := s.NrMap.Load(contName); found {
+	if v, found := s.NrMap.Load(contName); found {
+		// TODO: Del container
+		if err := s.DelWorker(v.(*GnbConfig).ContainerId, contName); err != nil {
+			return &emptypb.Empty{}, status.New(codes.Canceled, "Del worker failed.").Err()
+		}
+
 		s.NrMap.Delete(contName)
 	}
 
@@ -225,7 +234,7 @@ func (s *CLIServer) ListGnb(ctx context.Context, empty *emptypb.Empty) (*api.Gnb
 
 	s.NrMap.Range(
 		func(key, value interface{}) bool {
-			cfgList.GnbConfig = append(cfgList.GnbConfig, value.(*api.GnbConfig))
+			cfgList.GnbConfig = append(cfgList.GnbConfig, value.(*GnbConfig).Config)
 			return true
 		},
 	)

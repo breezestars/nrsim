@@ -25,7 +25,7 @@ import (
 var ueCmd = &cobra.Command{
 	Use:   "ue",
 	Short: "UE, User Equipment",
-	Long: `UE, User Equipment.`,
+	Long:  `UE, User Equipment.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("ue called")
 	},

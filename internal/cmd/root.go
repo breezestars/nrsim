@@ -28,10 +28,10 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "nrsim",
-	Short: "A brief description of your application",
+	Use:     "nrsim",
+	Short:   "A brief description of your application",
 	Version: "1.0",
-	Long: `A CLI can control nrsim master.`,
+	Long:    `A CLI can control nrsim master.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },

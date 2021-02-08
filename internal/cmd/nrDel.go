@@ -17,7 +17,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"github.com/cmingou/nrsim/internal/api"
 	"github.com/spf13/cobra"
 )
@@ -28,9 +27,13 @@ var nrDelCmd = &cobra.Command{
 	Short: "Del NR",
 	Long:  `A command to del NR.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("NR del called,\ngNB struct value is: \n%+v\n", nr)
+		//fmt.Printf("NR del called,\ngNB struct value is: \n%+v\n", nr)
+		if gNbId == NonExisted {
+			errLog.Printf("Please specify the worker id.")
+			return
+		}
 
-		id := &api.IdMessage{Id: uint32(nr.gnbId)}
+		id := &api.IdMessage{Id: uint32(gNbId)}
 
 		ctx, cancel := context.WithTimeout(context.Background(), GrpcConnectTimeout)
 		defer cancel()
@@ -54,5 +57,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// delCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	nrDelCmd.Flags().IntVarP(&nr.gnbId, "id", "i", 1, "Id of NR")
+	nrDelCmd.Flags().IntVarP(&gNbId, "id", "i", NonExisted, "Id of NR")
 }

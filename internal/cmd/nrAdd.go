@@ -22,15 +22,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Nr struct {
-	gnbId int
-	mcc   int
-	mnc   int
-	tac   int
-	sst   int
-	sd    int
-}
-
 // nrAddCmd represents the add command
 var nrAddCmd = &cobra.Command{
 	Use:   "add",

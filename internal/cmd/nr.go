@@ -19,9 +19,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const NonExisted = -1
+
 var (
-	nr Nr
+	nr    Nr
+	gNbId int
 )
+
+type Nr struct {
+	gnbId int
+	mcc   int
+	mnc   int
+	tac   int
+	sst   int
+	sd    int
+}
 
 // nrCmd represents the nr command
 var nrCmd = &cobra.Command{

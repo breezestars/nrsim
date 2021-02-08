@@ -36,8 +36,6 @@ func newCliServerClient() {
 		Port: cliServerPort,
 	}
 
-	infoLog.Printf("Connecting to CLI server: %v", serverAddr.String())
-
 	ctxCliSrv, ctxCliSrvCancel = context.WithTimeout(context.Background(), GrpcConnectTimeout)
 
 	conn, err := grpc.DialContext(ctxCliSrv, serverAddr.String(), grpc.WithBlock(), grpc.WithInsecure())

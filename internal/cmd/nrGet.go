@@ -31,8 +31,6 @@ var nrGetCmd = &cobra.Command{
 	Short: "Get NR",
 	Long:  `A command to get NR.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("NR get called,\ngNB struct value is: \n%+v\n", nr)
-
 		ctx, cancel := context.WithTimeout(context.Background(), GrpcConnectTimeout)
 		defer cancel()
 
@@ -43,7 +41,7 @@ var nrGetCmd = &cobra.Command{
 			dealError(err)
 		}
 
-		if nr.gnbId == -1 {
+		if gNbId == -1 {
 			// Print all NR
 			for _, v := range gnbCfgList.GnbConfig {
 				log.Printf("%+v\n", v.GlobalGNBID)
@@ -51,8 +49,8 @@ var nrGetCmd = &cobra.Command{
 		} else {
 			// Print specific NR
 			for _, v := range gnbCfgList.GnbConfig {
-				if v.GlobalGNBID.Gnbid == uint32(nr.gnbId) {
-					log.Printf("%+v\n", v.GlobalGNBID)
+				if v.GlobalGNBID.Gnbid == uint32(gNbId) {
+					fmt.Printf("%+v\n", v.GlobalGNBID)
 					break
 				}
 			}
@@ -72,5 +70,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	nrGetCmd.Flags().IntVarP(&nr.gnbId, "id", "i", -1, "Id of NR")
+	nrGetCmd.Flags().IntVarP(&gNbId, "id", "i", NonExisted, "Id of NR")
 }
