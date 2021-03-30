@@ -34,6 +34,10 @@ import (
 	"time"
 )
 
+var (
+	NrMap sync.Map
+)
+
 type MasterServer struct {
 	api.UnimplementedSimMasterServer
 	workers sync.Map
@@ -72,6 +76,17 @@ func (s *MasterServer) StreamChannel(stream api.SimMaster_StreamChannelServer) e
 
 	// Get worker IP
 	ip := net.ParseIP(md.Get("IP")[0])
+
+	// TODO: Redesign
+	NrMap.Range(
+		func(key, value interface{}) bool {
+			if value.(*GnbConfig).Ip == ip.String() {
+				value.(*GnbConfig).Registered = true
+				return false
+			}
+			return true
+		},
+	)
 
 	// Delete first and re-store
 	if _, found := s.workers.Load(ip.String()); found {
@@ -156,7 +171,6 @@ func StartMasterGrpcServer(ctx context.Context, srvPort int) error {
 type CLIServer struct {
 	api.UnimplementedSimCliServer
 
-	NrMap           sync.Map
 	containerClient *client.Client
 }
 
@@ -189,20 +203,25 @@ func StartCLIGrpcServer(ctx context.Context, srvPort int) error {
 func (s *CLIServer) CreateGnb(ctx context.Context, cfg *api.GnbConfig) (*emptypb.Empty, error) {
 	contName := s.GenContainerName(cfg.GlobalGNBID.Gnbid)
 
-	if _, found := s.NrMap.Load(contName); found {
+	// Check if existed
+	if _, found := NrMap.Load(contName); found {
 		return &emptypb.Empty{}, status.New(codes.AlreadyExists, "NR already existed.").Err()
 	}
 
-	contId, err := s.NewWorker(contName)
+	// Create new worker
+	contId, ip, err := s.NewWorker(contName)
 	if err != nil {
-		return &emptypb.Empty{}, status.New(codes.Canceled, "New worker failed.").Err()
+		return &emptypb.Empty{}, errors.Wrapf(err, "New worker failed.")
 	}
 
 	// TODO: Should check the integrity of cfg
-	s.NrMap.Store(contName, &GnbConfig{
+	NrMap.Store(contName, &GnbConfig{
 		ContainerId: contId,
 		Config:      cfg,
+		Ip:          ip,
 	})
+
+	debugLog.Printf("Created Gnb which IP:%v", ip)
 
 	return &emptypb.Empty{}, nil
 }
@@ -213,13 +232,13 @@ func (s *CLIServer) DelGnb(ctx context.Context, id *api.IdMessage) (*emptypb.Emp
 	// If found then delete, if not found then return nil.
 	// TODO: Change to LoadAndDelete func when the issue been fix,
 	// https://github.com/golang/go/issues/40999
-	if v, found := s.NrMap.Load(contName); found {
+	if v, found := NrMap.Load(contName); found {
 		// TODO: Del container
 		if err := s.DelWorker(v.(*GnbConfig).ContainerId, contName); err != nil {
 			return &emptypb.Empty{}, status.New(codes.Canceled, "Del worker failed.").Err()
 		}
 
-		s.NrMap.Delete(contName)
+		NrMap.Delete(contName)
 	}
 
 	return &emptypb.Empty{}, nil
@@ -232,7 +251,7 @@ func (s *CLIServer) ListGnb(ctx context.Context, empty *emptypb.Empty) (*api.Gnb
 		}
 	)
 
-	s.NrMap.Range(
+	NrMap.Range(
 		func(key, value interface{}) bool {
 			cfgList.GnbConfig = append(cfgList.GnbConfig, value.(*GnbConfig).Config)
 			return true

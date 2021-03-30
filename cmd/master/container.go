@@ -10,6 +10,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
 	"strconv"
+	"time"
 )
 
 const (
@@ -20,6 +21,9 @@ const (
 type GnbConfig struct {
 	ContainerId string
 	Config      *api.GnbConfig
+	Ip          string
+	Registered  bool
+
 }
 
 func (s *CLIServer) GetContainerClient() *client.Client {
@@ -38,8 +42,9 @@ func (s *CLIServer) GenContainerName(gNBId uint32) string {
 	return "nrsim-" + strconv.Itoa(int(gNBId))
 }
 
-func (s *CLIServer) NewWorker(contName string) (string, error) {
-	cont, err := s.GetContainerClient().ContainerCreate(context.Background(),
+func (s *CLIServer) NewWorker(contName string) (string, string, error) {
+	client := s.GetContainerClient()
+	cont, err := client.ContainerCreate(context.Background(),
 		&container.Config{
 			Image: ContainerImageName,
 			Cmd:   strslice.StrSlice{"-masterSrvIp", MasterServerAddress},
@@ -49,19 +54,32 @@ func (s *CLIServer) NewWorker(contName string) (string, error) {
 		nil,
 		contName,
 	)
-
 	if err != nil {
-		return "", errors.Wrapf(err, "Create worker contaienr failed")
+		return "", "", errors.Wrapf(err, "Create worker contaienr failed")
 	}
 
-	if err := s.GetContainerClient().ContainerStart(context.Background(), cont.ID, types.ContainerStartOptions{}); err != nil {
-		if err := s.GetContainerClient().ContainerRemove(context.Background(), cont.ID, types.ContainerRemoveOptions{}); err != nil {
+	if err := client.ContainerStart(context.Background(), cont.ID, types.ContainerStartOptions{}); err != nil {
+		if err := client.ContainerRemove(context.Background(), cont.ID, types.ContainerRemoveOptions{}); err != nil {
 			panic(err)
 		}
-		return "", errors.Wrapf(err, "Start worker contaienr failed")
+		return "", "", errors.Wrapf(err, "Start worker contaienr failed")
 	}
 
-	return cont.ID, nil
+	//TODO: Get network IP and return so can bind in map.
+	inspect, err := client.ContainerInspect(context.Background(), cont.ID)
+	if err != nil {
+		errLog.Printf("%+v", err)
+		//return "", "", errors.Wrapf(err, "Get IP from worker contaienr failed")
+	}
+
+	for i := 0; i < 5; i++ {
+		if inspect.NetworkSettings.IPAddress != "" {
+			return cont.ID, inspect.NetworkSettings.IPAddress, nil
+		}
+		time.Sleep(time.Millisecond)
+	}
+
+	return cont.ID, "", errors.New("Did not get IP address")
 }
 
 func (s *CLIServer) DelWorker(contId, contName string) error {

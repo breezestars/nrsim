@@ -20,6 +20,7 @@ import (
 	"context"
 	"github.com/cmingou/nrsim/internal/api"
 	"github.com/cmingou/nrsim/internal/logger"
+	"github.com/pkg/errors"
 	"log"
 	"time"
 )
@@ -51,5 +52,14 @@ func init() {
 }
 
 func dealError(err error) {
-	errLog.Printf("%v", err)
+	var e error
+	e = err
+	for {
+		if e == nil {
+			break
+		}
+		errLog.Printf("%v", e)
+		e = errors.Unwrap(e)
+	}
+
 }
